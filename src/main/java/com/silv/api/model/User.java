@@ -13,17 +13,14 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    /**
-     * 用户名
-     **/
-    @Column(name = "name", columnDefinition = "NVARCHAR(255)")
     private String name;
 
-    /**
-     * 密码
-     **/
-    @Column(name = "password", columnDefinition = "NVARCHAR(255)")
     private String password;
+
+    private String sex;
+
+    private int age;
+
 
     public Long getId() {
         return id;
@@ -49,10 +46,23 @@ public class User {
         this.password = password;
     }
 
-    public User(String name, String password) {
-        this.name = name;
-        this.password = password;
-    }
     public User() {
     }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
 }
