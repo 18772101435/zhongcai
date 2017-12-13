@@ -35,9 +35,7 @@ public class EMailService {
     private String theme;
 
     private static String code = String.valueOf(((Math.random() * 9 + 1) * 100000)).substring(0, 6);
-    private static String emailContent = "尊敬的用户:" +
-            "您的验证码为" +code+"，该验证码1分钟有效，请注意查收！" +
-            "谢谢！";
+    private static String emailContent = "尊敬的用户 : 您的验证码为" +code+"，该验证码1分钟有效，请注意查收！谢谢！";
 
     @Autowired
     private EMailDao eMailDao;
