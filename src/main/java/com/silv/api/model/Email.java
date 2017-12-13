@@ -1,65 +1,83 @@
 package com.silv.api.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
+@Table(name = "email")
 public class Email {
-  @Id
-  @GeneratedValue
-  private Long id;
+    @Id
+    @GeneratedValue
+    private Long id;
 
-  @Column(name = "receive_email")
-  private String receiveEmail;
+    @Column(name = "receive_email")
+    private String receiveEmail;
 
-  @Column(name = "send_email")
-  private String sendEmail;
+    @Column(name = "send_email")
+    private String sendEmail;
 
-  private String content;
+    private String content;
 
-  @Column(name = "create_time")
-  private Timestamp createTime;
+    private String theme;
 
-  public Long getId() {
-    return id;
-  }
+    private String sender;
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+    @Column(name = "create_time")
+    private Timestamp createTime;
 
-  public String getReceiveEmail() {
-    return receiveEmail;
-  }
+    public Long getId() {
+        return id;
+    }
 
-  public void setReceiveEmail(String receiveEmail) {
-    this.receiveEmail = receiveEmail;
-  }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-  public String getSendEmail() {
-    return sendEmail;
-  }
+    public String getReceiveEmail() {
+        return receiveEmail;
+    }
 
-  public void setSendEmail(String sendEmail) {
-    this.sendEmail = sendEmail;
-  }
+    public void setReceiveEmail(String receiveEmail) {
+        this.receiveEmail = receiveEmail;
+    }
 
-  public String getContent() {
-    return content;
-  }
+    public String getSendEmail() {
+        return sendEmail;
+    }
 
-  public void setContent(String content) {
-    this.content = content;
-  }
+    public void setSendEmail(String sendEmail) {
+        this.sendEmail = sendEmail;
+    }
 
-  public Timestamp getCreateTime() {
-    return createTime;
-  }
+    public String getContent() {
+        return content;
+    }
 
-  public void setCreateTime(Timestamp createTime) {
-    this.createTime = createTime;
-  }
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getTheme() {
+        return theme;
+    }
+
+    public void setTheme(String theme) {
+        this.theme = theme;
+    }
+
+    public Timestamp getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Timestamp createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getSender() {
+        return sender;
+    }
+
+    public void setSender(String sender) {
+        this.sender = sender;
+    }
 }
