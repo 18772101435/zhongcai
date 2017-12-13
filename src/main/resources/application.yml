@@ -6,3 +6,10 @@ sms:
     domain: dysmsapi.aliyuncs.com
     signName: 陈瑶
     templateCode: SMS_115930654
+
+mail:
+  accountName: panpan@dream-yao.top
+  tagName: chenyao
+  fromAlias: 私律科技
+  subject: 登陆验证码
+  htmlBody: 尊敬的用户:您的验证码为 ${code}，该验证码1分钟有效，请注意查收！谢谢！

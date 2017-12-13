@@ -8,7 +8,9 @@ import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
 import com.silv.api.dao.SmsDao;
+import com.silv.api.model.Result;
 import com.silv.api.model.Sms;
+import com.silv.api.util.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -36,7 +38,7 @@ public class SmsService {
     @Autowired
     private SmsDao smsDao;
 
-    public String sendSms(String phone) throws ClientException {
+    public Result sendSms(String phone) throws ClientException {
         // 可自助调整超时时间
         System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
         System.setProperty("sun.net.client.defaultReadTimeout", "10000");
@@ -67,7 +69,7 @@ public class SmsService {
 
         // hint 此处可能会抛出异常，注意catch
         SendSmsResponse sendSmsResponse = acsClient.getAcsResponse(request);
-        String result = "短信发送失败";
+        Result result = ResultUtil.error(0, "短信发送失败" + sendSmsResponse.getCode());
         if (sendSmsResponse.getCode() != null && sendSmsResponse.getCode().equals("OK")) {
             // 发送短信请求成功,保存短信内容到数据库
             System.out.println("_____________发送SMS_115930654短信收到的响应信息_______________");
@@ -80,14 +82,14 @@ public class SmsService {
         return result;
     }
 
-    public String saveSms(String phone, String code) {
+    public Result saveSms(String phone, String code) {
         Sms sms = new Sms();
         sms.setMessageCode(code);
         sms.setPhone(phone);
         sms.setCreateTime(new Timestamp(System.currentTimeMillis()));
         sms.setExpireTime(new Timestamp(System.currentTimeMillis() + 1 * 60 * 1000)); // 验证码一分钟后过期
         this.smsDao.save(sms);
-        return "短信发送成功";
+        return ResultUtil.success(sms);
     }
 
     private static String getRandomCode() {
