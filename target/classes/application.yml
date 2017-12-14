@@ -1,11 +1,12 @@
-accessKeyId: LTAI0CIiXOnd3SNK
-accessKeySecret: tMvvZ3VELyPWYfbk8hYNwFCnnTXk2j
 sms:
   message:
+    accessKeyId: LTAI0CIiXOnd3SNK
+    accessKeySecret: tMvvZ3VELyPWYfbk8hYNwFCnnTXk2j
     product: Dysmsapi
     domain: dysmsapi.aliyuncs.com
     signName: 陈瑶
     templateCode: SMS_115930654
+
 mail:
   accountName: panpan@dream-yao.top
   tagName: chenyao

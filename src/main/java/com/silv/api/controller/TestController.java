@@ -1,20 +1,20 @@
 package com.silv.api.controller;
 
-import java.sql.Timestamp;
-import java.util.Date;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-/**
- * Created by yao on 2017/12/7.
- */
+@RestController
+@RequestMapping("test")
 public class TestController {
-    public static void main(String[] args) {
-        System.out.println(new Date());
-        System.out.println(new Date().getTime());
-        System.out.println(new Timestamp((new Date()).getTime()));
-        System.out.println(new Timestamp((new Date()).getTime()+1*60*1000));
-        System.out.println(new Timestamp((new Date()).getTime()+1*60*1000).after(new Timestamp(System.currentTimeMillis())));
-        Timestamp ts = new Timestamp(System.currentTimeMillis());
-        System.out.println("ts:::"+ts);
 
+    @PostMapping
+    public String getPhones(@RequestParam String[] phones) {
+        String a = "";
+        for (int i = 0; i < phones.length; i++) {
+            a = a + phones[i] + ",";
+        }
+        return a.substring(0, a.length() - 1);
     }
 }
