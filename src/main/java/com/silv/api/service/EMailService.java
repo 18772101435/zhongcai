@@ -20,9 +20,9 @@ import java.sql.Timestamp;
 
 @Service
 public class EMailService {
-    @Value("${accessKeyId}")
+    @Value("${sms.message.accessKeyId}")
     private String accessKeyId;
-    @Value("${accessKeySecret}")
+    @Value("${sms.message.accessKeySecret}")
     private String accessKeySecret;
 
     @Value("${mail.accountName}")
