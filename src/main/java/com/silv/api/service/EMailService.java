@@ -9,6 +9,7 @@ import com.aliyuncs.exceptions.ServerException;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
 import com.silv.api.dao.EMailDao;
+import com.silv.api.enums.StatusEnum;
 import com.silv.api.model.Email;
 import com.silv.api.model.Result;
 import com.silv.api.util.ResultUtil;
@@ -58,13 +59,13 @@ public class EMailService {
             request.setHtmlBody(emailContent); // 邮件内容
             SingleSendMailResponse httpResponse = client.getAcsResponse(request);
 
-            result = this.saveEmail(receiveEmail, 1, emailContent);
+            result = this.saveEmail(receiveEmail, StatusEnum.VALID.getValue(), emailContent);
         } catch (ServerException e) {
             e.printStackTrace();
-            return this.saveEmail(receiveEmail, 0, null);
+            return this.saveEmail(receiveEmail, StatusEnum.INVALID.getValue(), null);
         } catch (ClientException e) {
             logger.error("错误日志:{}", e);
-            return this.saveEmail(receiveEmail, 0, null);
+            return this.saveEmail(receiveEmail, StatusEnum.INVALID.getValue(), null);
     }
         return result;
     }
