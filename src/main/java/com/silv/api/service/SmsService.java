@@ -22,23 +22,23 @@ import java.sql.Timestamp;
  */
 @Service
 public class SmsService {
-    @Value("${sms.message.product}")
-    private String product;
-    @Value("${sms.message.domain}")
-    private String domain;
-    @Value("${sms.message.accessKeyId}")
+    @Value("${ali.accessKeyId}")
     private String accessKeyId;
-    @Value("${sms.message.accessKeySecret}")
+    @Value("${ali.accessKeySecret}")
     private String accessKeySecret;
-    @Value("${sms.message.signName}")
+    @Value("${ali.sms.product}")
+    private String product;
+    @Value("${ali.sms.domain}")
+    private String domain;
+    @Value("${ali.sms.signName}")
     private String signName;
-    @Value("${sms.message.templateCode}")
+    @Value("${ali.sms.templateCode}")
     private String templateCode;
 
     @Autowired
     private SmsDao smsDao;
 
-    public Result sendSms(String phone) throws ClientException {
+    public Result sendSms(String[] phoneArray) throws ClientException {
         // 可自助调整超时时间
         System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
         System.setProperty("sun.net.client.defaultReadTimeout", "10000");
@@ -50,8 +50,9 @@ public class SmsService {
 
         // 组装请求对象-具体描述见控制台-文档部分内容
         SendSmsRequest request = new SendSmsRequest();
-        // 必填:待发送手机号
-        request.setPhoneNumbers(phone);
+        // 必填:待发送手机号。支持以逗号分隔的形式进行批量调用，批量上限为1000个手机号码,批量调用相对于单条调用及时性稍有延迟,验证码类型的短信推荐使用单条调用的方式
+        String phoneString = this.getPhoneString(phoneArray); // 将手机号数组转化为符合格式的手机号字符串
+        request.setPhoneNumbers(phoneString);
         // 必填:短信签名-可在短信控制台中找到
         request.setSignName(signName);
         // 必填:短信模板-可在短信控制台中找到
@@ -77,34 +78,45 @@ public class SmsService {
             System.out.println("请求的状态码:" + sendSmsResponse.getCode());
             System.out.println("请求的状态码描述:" + sendSmsResponse.getMessage());
             System.out.println("请求的回执ID:" + sendSmsResponse.getBizId());
-            result = this.saveSms(phone, code);
+            result = this.saveSms(phoneArray, code);
         }
         return result;
     }
 
-    public Result saveSms(String phone, String code) {
-        Sms sms = new Sms();
-        sms.setMessageCode(code);
-        sms.setPhone(phone);
-        sms.setCreateTime(new Timestamp(System.currentTimeMillis()));
-        sms.setExpireTime(new Timestamp(System.currentTimeMillis() + 1 * 60 * 1000)); // 验证码一分钟后过期
-        this.smsDao.save(sms);
-        return ResultUtil.success(sms);
+    public Result saveSms(String[] phoneArray, String code) {
+        for (int i = 0; i < phoneArray.length; i++) {
+            Sms sms = new Sms();
+            sms.setMessageCode(code);
+            sms.setPhone(phoneArray[i]);
+            sms.setCreateTime(new Timestamp(System.currentTimeMillis()));
+            sms.setExpireTime(new Timestamp(System.currentTimeMillis() + 1 * 60 * 1000)); // 验证码一分钟后过期
+            this.smsDao.save(sms);
+        }
+        return ResultUtil.success();
     }
 
-    private static String getRandomCode() {
+    private String getRandomCode() {
         return String.valueOf(((Math.random() * 9 + 1) * 100000)).substring(0, 6);
+    }
+
+    public String getPhoneString(String[] phoneArray) {
+        String phone = "";
+        for (int i = 0; i < phoneArray.length; i++) {
+            phone = phone + phoneArray[i] + ",";
+        }
+        return phone.substring(0, phone.length() - 1);
     }
 
     public String getCodeByPhone(String phone, String code) {
         Sms sms = this.smsDao.getCodeByPhone(phone);
         Timestamp currentTime = new Timestamp(System.currentTimeMillis());
-        if(currentTime.after(sms.getExpireTime())){  // 超时时间已过
-            return "该验证码已失效"+"   "+code+"   "+phone;
+        if (currentTime.after(sms.getExpireTime())) { // 超时时间已过
+            return "该验证码已失效" + "   " + code + "   " + phone;
         }
-        if(!sms.getMessageCode().equals(code)){
+        if (!sms.getMessageCode().equals(code)) {
             return "验证码错误";
         }
-        return "验证码正确，验证通过"+"   "+code+"   "+phone;
+        return "验证码正确，验证通过" + "   " + code + "   " + phone;
     }
+
 }

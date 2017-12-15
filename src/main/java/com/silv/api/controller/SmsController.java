@@ -21,8 +21,8 @@ public class SmsController {
      * @throws Exception
      */
     @PostMapping("/send")
-    public Result sendSmsCode(@RequestParam String phone) throws ClientException {
-        return this.smsService.sendSms(phone);
+    public Result sendSmsCode(@RequestParam String [] phones) throws ClientException {
+        return this.smsService.sendSms(phones);
     }
 
     /**

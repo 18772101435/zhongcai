@@ -1,13 +1,12 @@
 package com.silv.api.util;
 
-
 import com.silv.api.model.Result;
 
 public class ResultUtil {
 
     public static Result success(Object object) {
         Result result = new Result();
-        result.setCode(0);
+        result.setCode(1);
         result.setMsg("成功");
         result.setData(object);
         return result;

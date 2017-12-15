@@ -1,15 +1,13 @@
-sms:
-  message:
-    accessKeyId: LTAI0CIiXOnd3SNK
-    accessKeySecret: tMvvZ3VELyPWYfbk8hYNwFCnnTXk2j
+ali:
+  accessKeyId: LTAI0CIiXOnd3SNK
+  accessKeySecret: tMvvZ3VELyPWYfbk8hYNwFCnnTXk2j
+  sms:
     product: Dysmsapi
     domain: dysmsapi.aliyuncs.com
     signName: 陈瑶
     templateCode: SMS_115930654
-
-mail:
-  accountName: panpan@dream-yao.top
-  tagName: chenyao
-  fromAlias: 私律科技
-  subject: 登陆验证码
-  htmlBody: 尊敬的用户:您的验证码为 ${code}，该验证码1分钟有效，请注意查收！谢谢！
+  mail:
+    accountName: panpan@dream-yao.top
+    tagName: chenyao
+    fromAlias: 私律科技
+    subject: 登陆验证码

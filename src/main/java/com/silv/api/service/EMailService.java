@@ -12,6 +12,8 @@ import com.silv.api.dao.EMailDao;
 import com.silv.api.model.Email;
 import com.silv.api.model.Result;
 import com.silv.api.util.ResultUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -20,33 +22,30 @@ import java.sql.Timestamp;
 
 @Service
 public class EMailService {
-    @Value("${sms.message.accessKeyId}")
+    @Value("${ali.accessKeyId}")
     private String accessKeyId;
-    @Value("${sms.message.accessKeySecret}")
+    @Value("${ali.accessKeySecret}")
     private String accessKeySecret;
 
-    @Value("${mail.accountName}")
+    @Value("${ali.mail.accountName}")
     private String accountName;
-    @Value("${mail.tagName}")
+    @Value("${ali.mail.tagName}")
     private String tagName;
-    @Value("${mail.fromAlias}")
+    @Value("${ali.mail.fromAlias}")
     private String sender;
-    @Value("${mail.subject}")
+    @Value("${ali.mail.subject}")
     private String theme;
-
-    private static String code = String.valueOf(((Math.random() * 9 + 1) * 100000)).substring(0, 6);
-    private static String emailContent = "尊敬的用户:" +
-            "您的验证码为" +code+"，该验证码1分钟有效，请注意查收！" +
-            "谢谢！";
 
     @Autowired
     private EMailDao eMailDao;
 
-    public Result sendEMail(String receiveEmail) throws ClientException {
+    private static Logger logger = LoggerFactory.getLogger(EMailService.class);
+    public Result sendEMail(String receiveEmail) throws ClientException, RuntimeException {
         // 如果是除杭州region外的其它region（如新加坡、澳洲Region），需要将下面的"cn-hangzhou"替换为"ap-southeast-1"、或"ap-southeast-2"。
         IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", accessKeyId, accessKeySecret);
         IAcsClient client = new DefaultAcsClient(profile);
         SingleSendMailRequest request = new SingleSendMailRequest();
+        String emailContent = "尊敬的用户:您的验证码为" + String.valueOf(((Math.random() * 9 + 1) * 100000)).substring(0, 6) + "，该验证码1分钟有效，请注意查收！谢谢！";
         Result result = null;
         try {
             request.setAccountName(accountName); // 控制台的发信地址
@@ -59,26 +58,29 @@ public class EMailService {
             request.setHtmlBody(emailContent); // 邮件内容
             SingleSendMailResponse httpResponse = client.getAcsResponse(request);
 
-            result = this.saveEmail(receiveEmail);
+            result = this.saveEmail(receiveEmail, 1, emailContent);
         } catch (ServerException e) {
             e.printStackTrace();
-            result = ResultUtil.error(0, "ServerException");
+            return this.saveEmail(receiveEmail, 0, null);
         } catch (ClientException e) {
-            e.printStackTrace();
-            result = ResultUtil.error(0, "ClientException");
-        }
+            logger.error("错误日志:{}", e);
+            return this.saveEmail(receiveEmail, 0, null);
+    }
         return result;
     }
 
-    public Result saveEmail(String receiveEmail) {
+    public Result saveEmail(String receiveEmail, int status, String emailContent) {
         Email mail = new Email();
         mail.setSender(sender);
         mail.setSendEmail(accountName);
         mail.setReceiveEmail(receiveEmail);
         mail.setTheme(theme);
+        mail.setStatus(status);
         mail.setContent(emailContent);
         mail.setCreateTime(new Timestamp(System.currentTimeMillis()));
         this.eMailDao.save(mail);
+        if(status == 0)
+            return ResultUtil.error(0, "error");
         return ResultUtil.success(mail);
     }
 }

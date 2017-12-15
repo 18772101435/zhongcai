@@ -25,6 +25,8 @@ public class Email {
     @Column(name = "create_time")
     private Timestamp createTime;
 
+    private int status;
+
     public Long getId() {
         return id;
     }
@@ -79,5 +81,13 @@ public class Email {
 
     public void setSender(String sender) {
         this.sender = sender;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }
