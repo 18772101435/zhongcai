@@ -17,7 +17,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.1.RELEASE</version>
+        <version>1.5.9.RELEASE</version>
         <relativePath/>
     </parent>
 
@@ -58,11 +58,30 @@
             <artifactId>aliyun-java-sdk-dysmsapi</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
+        <!--阿里邮件-->
         <dependency>
             <groupId>com.aliyun</groupId>
             <artifactId>aliyun-java-sdk-dm</artifactId>
             <version>3.1.0</version>
         </dependency>
+
+        <!--搜狐邮件  -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpmime</artifactId>
+            <version>4.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20140107</version>
+        </dependency>
+
     </dependencies>
     <build>
         <plugins>
@@ -76,7 +95,7 @@
         </plugins>
     </build>
 
-    <!--阿里邮件  -->
+    <!--阿里邮件    -->
     <repositories>
         <repository>
             <id>sonatype-nexus-staging</id>

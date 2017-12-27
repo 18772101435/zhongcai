@@ -13,13 +13,24 @@ import com.silv.api.enums.StatusEnum;
 import com.silv.api.model.Email;
 import com.silv.api.model.Result;
 import com.silv.api.util.ResultUtil;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class EMailService {
@@ -37,10 +48,20 @@ public class EMailService {
     @Value("${ali.mail.subject}")
     private String theme;
 
+    @Value("${sohu.apiUser}")
+    private String apiUser;
+    @Value("${sohu.apiKey}")
+    private String apiKey;
+    @Value("${sohu.from}")
+    private String fromEmail;
+    @Value("${sohu.fromName}")
+    private String fromName;
+
     @Autowired
     private EMailDao eMailDao;
 
     private static Logger logger = LoggerFactory.getLogger(EMailService.class);
+
     public Result sendEMail(String receiveEmail) throws ClientException, RuntimeException {
         // 如果是除杭州region外的其它region（如新加坡、澳洲Region），需要将下面的"cn-hangzhou"替换为"ap-southeast-1"、或"ap-southeast-2"。
         IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", accessKeyId, accessKeySecret);
@@ -66,7 +87,7 @@ public class EMailService {
         } catch (ClientException e) {
             logger.error("错误日志:{}", e);
             return this.saveEmail(receiveEmail, StatusEnum.INVALID.getValue(), null);
-    }
+        }
         return result;
     }
 
@@ -80,8 +101,47 @@ public class EMailService {
         mail.setContent(emailContent);
         mail.setCreateTime(new Timestamp(System.currentTimeMillis()));
         this.eMailDao.save(mail);
-        if(status == 0)
+        if (status == 0)
             return ResultUtil.error(0, "error");
         return ResultUtil.success(mail);
+    }
+
+    public Result sendCommon(String url, String receiveEmail, String subject, String emailContent) throws IOException {
+
+        HttpPost httpPost = new HttpPost(url);
+        HttpClient httpClient = new DefaultHttpClient();
+
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("apiUser", apiUser));
+        params.add(new BasicNameValuePair("apiKey", apiKey));
+        params.add(new BasicNameValuePair("to", receiveEmail));
+        params.add(new BasicNameValuePair("from", fromEmail));
+        params.add(new BasicNameValuePair("fromName", fromName));
+        params.add(new BasicNameValuePair("subject", subject));
+        params.add(new BasicNameValuePair("html", emailContent));
+
+        httpPost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+
+        HttpResponse response = httpClient.execute(httpPost);
+
+        Result result = ResultUtil.error(0, "邮件发送失败" + response.getStatusLine());
+        // 处理响应
+        if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+            // 正常返回, 解析返回数据
+            Email mail = new Email();
+            mail.setSender(fromName);
+            mail.setSendEmail(fromEmail);
+            mail.setReceiveEmail(receiveEmail);
+            mail.setTheme(subject);
+            mail.setStatus(1);
+            mail.setContent(emailContent);
+            mail.setCreateTime(new Timestamp(System.currentTimeMillis()));
+            mail.setResponseCode(String.valueOf(response.getStatusLine()));
+            this.eMailDao.save(mail);
+
+            result = ResultUtil.success(mail);
+        }
+        httpPost.releaseConnection();
+        return result;
     }
 }

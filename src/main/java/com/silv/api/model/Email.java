@@ -27,6 +27,9 @@ public class Email {
 
     private int status;
 
+    @Column(name = "response_code")
+    private String responseCode;
+
     public Long getId() {
         return id;
     }
@@ -89,5 +92,13 @@ public class Email {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public String getResponseCode() {
+        return responseCode;
+    }
+
+    public void setResponseCode(String responseCode) {
+        this.responseCode = responseCode;
     }
 }
