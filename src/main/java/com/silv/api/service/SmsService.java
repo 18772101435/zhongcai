@@ -83,11 +83,11 @@ public class SmsService {
         return result;
     }
 
-    public Result saveSms(String[] phoneArray, String code) {
-        for (int i = 0; i < phoneArray.length; i++) {
+    private Result saveSms(String[] phoneArray, String code) {
+        for (String phone : phoneArray) {
             Sms sms = new Sms();
             sms.setMessageCode(code);
-            sms.setPhone(phoneArray[i]);
+            sms.setPhone(phone);
             sms.setCreateTime(new Timestamp(System.currentTimeMillis()));
             sms.setExpireTime(new Timestamp(System.currentTimeMillis() + 1 * 60 * 1000)); // 验证码一分钟后过期
             this.smsDao.save(sms);
@@ -99,10 +99,10 @@ public class SmsService {
         return String.valueOf(((Math.random() * 9 + 1) * 100000)).substring(0, 6);
     }
 
-    public String getPhoneString(String[] phoneArray) {
-        String phone = "";
-        for (int i = 0; i < phoneArray.length; i++) {
-            phone = phone + phoneArray[i] + ",";
+    private String getPhoneString(String[] phoneArray) {
+        StringBuilder phone = new StringBuilder();
+        for (String aPhoneArray : phoneArray) {
+            phone.append(aPhoneArray).append(",");
         }
         return phone.substring(0, phone.length() - 1);
     }

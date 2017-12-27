@@ -1,7 +1,12 @@
 package com.silv.api.dao;
 
-/**
- * Created by yao on 2017/12/20.
- */
-public interface UserDao {
+import com.silv.api.model.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface UserDao extends JpaRepository<User, Long> {
+
+    User findByName(String name);
+
 }

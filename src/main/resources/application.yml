@@ -11,3 +11,9 @@ ali:
     tagName: chenyao
     fromAlias: 私律科技
     subject: 登陆验证码
+
+sohu:
+  apiUser: jjJJ_test_5gb4aS
+  apiKey: UlfSuHUe43V2v1he
+  from: test@dream-pan.top
+  fromName: 私律科技
