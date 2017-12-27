@@ -84,10 +84,10 @@ public class SmsService {
     }
 
     private Result saveSms(String[] phoneArray, String code) {
-        for (String phone : phoneArray) {
+        for (String phones : phoneArray) {
             Sms sms = new Sms();
             sms.setMessageCode(code);
-            sms.setPhone(phone);
+            sms.setPhone(phones);
             sms.setCreateTime(new Timestamp(System.currentTimeMillis()));
             sms.setExpireTime(new Timestamp(System.currentTimeMillis() + 1 * 60 * 1000)); // 验证码一分钟后过期
             this.smsDao.save(sms);
