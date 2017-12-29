@@ -7,6 +7,7 @@ import com.silv.api.util.MD5Utils;
 import com.silv.api.util.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
@@ -30,7 +31,7 @@ public class UserService {
 
     public Result checkUser(String name, String password) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         User user = this.userDao.findByName(name);
-        if (user == null)
+        if (StringUtils.isEmpty(user))
             return ResultUtil.error(0, "该用户不存在");
         String md5Password = MD5Utils.EncoderByMd5(password);
         if (user.getPassword().equals(md5Password)) {
