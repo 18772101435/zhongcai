@@ -11,6 +11,7 @@ import org.springframework.util.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 /**
  * Created by yao on 2017/12/20.
@@ -38,5 +39,10 @@ public class UserService {
             return ResultUtil.success(user);
         }
         return ResultUtil.error(0, "密码不正确");
+    }
+
+    public Result queryAll() {
+        List<User> list = this.userDao.findAll();
+        return ResultUtil.success(list);
     }
 }

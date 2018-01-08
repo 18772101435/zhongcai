@@ -21,6 +21,15 @@ public class User {
 
     private int age;
 
+    private boolean status;
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
 
     public Long getId() {
         return id;

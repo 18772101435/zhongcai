@@ -42,5 +42,16 @@ public class UserController {
         return result;
     }
 
+    /**
+     * 查询所有用户信息
+     *
+     * @throws Exception
+     */
+    @PostMapping("all")
+    public Result queryAll() {
+        Result result = this.userService.queryAll();
+        return result;
+    }
+
 
 }
