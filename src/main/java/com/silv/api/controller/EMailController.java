@@ -92,4 +92,71 @@ public class EMailController {
         //
         httpPost.releaseConnection();
     }
+
+
+   /* *//**
+     * 搜狐模板发送邮件
+     *
+     * @throws Exception
+     *//*
+    @PostMapping("sohu-template")
+    public Result sendTemplate() throws ClientProtocolException, IOException {
+
+        final String url = "http://api.sendcloud.net/apiv2/mail/sendtemplate";
+
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        HttpPost httpPost = new HttpPost(url);
+
+
+        List<EMail> dataList = new ArrayList<EMail>();
+        dataList.add(new EMail("617807685@qq.com", "123456"));
+
+        final String xsmtpapi = convert(dataList);
+
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+
+        params.add(new BasicNameValuePair("apiUser", "silvkeji_test_aXAP6o"));
+        params.add(new BasicNameValuePair("apiKey", "KQhNFCMjzjwppWK9"));
+        params.add(new BasicNameValuePair("xsmtpapi", xsmtpapi));
+        params.add(new BasicNameValuePair("templateInvokeName", "template_code"));
+        params.add(new BasicNameValuePair("from", "test@uHwckN1gRSD4WhFM0OPmpmKmQHIUgByq.sendcloud.org"));
+        params.add(new BasicNameValuePair("fromName", "仲裁")); // 发件人名称
+        params.add(new BasicNameValuePair("subject", "模板试一试"));
+
+        httpPost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+
+        HttpResponse response = httpClient.execute(httpPost);
+
+        if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) { // 正常返回
+            System.out.println("正常返回的！");
+            System.out.println(EntityUtils.toString(response.getEntity()));
+        } else {
+            System.err.println("error");
+        }
+        httpPost.releaseConnection();
+
+        return ResultUtil.success();
+    }
+
+    public static String convert(List<EMail> dataList) {
+
+        JSONObject ret = new JSONObject();
+
+        JSONArray to = new JSONArray();
+
+        JSONArray codes = new JSONArray();
+
+        for (EMail eMail : dataList) {
+            to.put(eMail.getReceiveEmail());
+            codes.put(eMail.getCode());
+        }
+
+        JSONObject sub = new JSONObject();
+        sub.put("%code%", codes);
+
+        ret.put("to", to);
+        ret.put("sub", sub);
+
+        return ret.toString();
+    }*/
 }
