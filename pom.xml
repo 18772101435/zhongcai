@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.silv.test1</groupId>
-    <artifactId>test1</artifactId>
+    <groupId>com.silv.project</groupId>
+    <artifactId>MyProject</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <packaging>jar</packaging>
@@ -47,17 +47,17 @@
             <version>1.2.17</version>
         </dependency>
 
-        <!--阿里短信  -->
-        <dependency>
-            <groupId>org.alibaba</groupId>
-            <artifactId>aliyun-java-sdk-core</artifactId>
-            <version>3.3.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.alibaba</groupId>
-            <artifactId>aliyun-java-sdk-dysmsapi</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
-        </dependency>
+        <!--&lt;!&ndash;阿里短信  &ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>org.alibaba</groupId>-->
+            <!--<artifactId>aliyun-java-sdk-core</artifactId>-->
+            <!--<version>3.3.1-SNAPSHOT</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>org.alibaba</groupId>-->
+            <!--<artifactId>aliyun-java-sdk-dysmsapi</artifactId>-->
+            <!--<version>1.0.0-SNAPSHOT</version>-->
+        <!--</dependency>-->
         <!--阿里邮件-->
         <dependency>
             <groupId>com.aliyun</groupId>
