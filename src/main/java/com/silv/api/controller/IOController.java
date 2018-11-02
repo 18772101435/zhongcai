@@ -11,7 +11,7 @@ import java.io.FileNotFoundException;
 
 @RestController
 @RequestMapping("test")
-public class TestController {
+public class IOController {
 
     /**
      * 递归遍历文件夹子目录
@@ -32,9 +32,5 @@ public class TestController {
     public static void main(String[] args) {
         File file = new File("D:\\asd");
         listDirectory(file);
-    }
-
-    public static void test() throws FileNotFoundException {
-        FileInputStream fileInputStream = new FileInputStream("");
     }
 }
