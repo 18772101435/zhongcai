@@ -20,7 +20,7 @@ public class ResultUtil {
         Result result = new Result();
         result.setCode(code);
         result.setMsg(msg);
-        result.setData("");
+        result.setData("object");
         return result;
     }
 }
