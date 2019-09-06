@@ -20,7 +20,15 @@ public class ResultUtil {
         Result result = new Result();
         result.setCode(500);
         result.setMsg("失败");
-        result.setData("object");
+        result.setData(object);
+        return result;
+    }
+
+    public static Result error(Integer code, String msg) {
+        Result result = new Result();
+        result.setCode(code);
+        result.setMsg(msg);
+        result.setData("");
         return result;
     }
 }
