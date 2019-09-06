@@ -6,7 +6,7 @@ public class ResultUtil {
 
     public static Result success(Object object) {
         Result result = new Result();
-        result.setCode(1);
+        result.setCode(200);
         result.setMsg("成功");
         result.setData(object);
         return result;
@@ -16,10 +16,10 @@ public class ResultUtil {
         return success("");
     }
 
-    public static Result error(Integer code, String msg) {
+    public static Result error(Object object) {
         Result result = new Result();
-        result.setCode(code);
-        result.setMsg(msg);
+        result.setCode(500);
+        result.setMsg("失败");
         result.setData("object");
         return result;
     }

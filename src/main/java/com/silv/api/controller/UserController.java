@@ -1,8 +1,13 @@
 package com.silv.api.controller;
 
+import com.silv.api.dto.UserDto;
 import com.silv.api.model.Result;
 import com.silv.api.service.UserService;
+import com.silv.api.util.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -10,6 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by yao on 2017/12/20.
@@ -53,5 +61,20 @@ public class UserController {
         return result;
     }
 
+    @PostMapping(value = "/getUser")
+    public Result getUser(@Validated UserDto userDto, BindingResult result) {
+        Map<String, Object> map = new HashMap<>();
+        if (result.hasErrors()) {
+            List<FieldError> fieldErrors = result.getFieldErrors();
+            for (FieldError fieldError : fieldErrors) {
+                map.put(fieldError.getField(), fieldError.getDefaultMessage());
+            }
+            return ResultUtil.error(map);
+        }
+        long size = userDto.getFile().getSize();
+        map.put("name", userDto.getName());
+        map.put("password", userDto.getPassword());
+        return ResultUtil.success(map);
+    }
 
 }
