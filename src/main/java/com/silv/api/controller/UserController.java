@@ -1,10 +1,15 @@
 package com.silv.api.controller;
 
 import com.silv.api.dto.UserDto;
+import com.silv.api.model.DutyArrangeDetails;
 import com.silv.api.model.Result;
+import com.silv.api.service.DutyArrangeService;
 import com.silv.api.service.UserService;
+import com.silv.api.util.DateUtils;
 import com.silv.api.util.ResultUtil;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
@@ -15,9 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Created by yao on 2017/12/20.
@@ -28,6 +33,10 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private DutyArrangeService dutyArrangeService;
+
     /**
      * 添加用户
      *
@@ -76,5 +85,6 @@ public class UserController {
         map.put("password", userDto.getPassword());
         return ResultUtil.success(map);
     }
+
 
 }
