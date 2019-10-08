@@ -4,6 +4,8 @@ import com.aliyuncs.exceptions.ClientException;
 import com.silv.api.dao.EMailDao;
 import com.silv.api.model.Result;
 import com.silv.api.service.EMailService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -21,6 +23,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Api(description = "阿里邮件接口")
 @RestController
 @RequestMapping("email")
 public class EMailController {
@@ -36,6 +39,7 @@ public class EMailController {
      *
      * @throws Exception
      */
+    @ApiOperation(value = "1-1、阿里发送邮件", notes = "阿里发送邮件")
     @PostMapping("ali-single-send")
     public Result sendEMail(@RequestParam String receiveEmail) throws ClientException {
         return this.mailService.sendEMail(receiveEmail);
@@ -46,6 +50,7 @@ public class EMailController {
      *
      * @throws Exception
      */
+    @ApiOperation(value = "1-1、搜狐普通发送邮件", notes = "搜狐普通发送邮件")
     @PostMapping("sohu-common")
     public Result sendCommon(@RequestParam String receiveEmail, @RequestParam String subject, @RequestParam String emailContent) throws IOException {
 
@@ -94,7 +99,7 @@ public class EMailController {
     }
 
 
-   /* *//**
+    /* *//**
      * 搜狐模板发送邮件
      *
      * @throws Exception
